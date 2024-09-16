@@ -8,20 +8,19 @@ const CLIENT_ID = "";
 const CLIENT_SECRET = "";
 
 function SearchBar() {
-  const url = "http://ws.audioscrobbler.com/2.0/";
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
-
-
-  //Conect to the APIs
+  //Conect to the API
   useEffect(() => {
     fetch(keys)
       .then(row => row.text())
       .then(
         text => {
           const keyArray = text.split(",")
+          console.log("here are the keys before:" + keyArray)
           const CLIENT_ID = keyArray[0]
           const CLIENT_SECRET = keyArray[1]
+          console.log("Client ID: " + CLIENT_ID + " and Client Secret:" + CLIENT_SECRET)
           const authParameters = {
             method: 'POST',
             headers: {
@@ -33,36 +32,52 @@ function SearchBar() {
         })
       .then(authParameters => fetch('https://accounts.spotify.com/api/token', authParameters))
       .then(result => result.json())
-      .then(data => setAccessToken(data.accessToken))
-      .then(() => console.log("Token saved successfully"))
+      .then(data => {
+        console.log(data)
+        setAccessToken(data.access_token)
+        console.log("Token saved successfully")
+      })
   }, [])
 
   //Search
-  async function Search(){
-    console.log("Search for " + searchInput);
+  const fetchData = (value) => {
+    const queryParameters = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }
+    fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', queryParameters)
+    .then((response) => response.json())
+    .then((json) => {
+      const results = json.filter((artist) =>{
+        return value &&
+        artist &&
+        artist.name &&
+        artist.name.toLowerCase().includes(value)
+      })
+    })
+  }
+
+  const handleChange = (value) => {
+    setSearchInput(value);
+    fetchData(value);
   }
 
   return (
-
     <>
       <Container>
         <InputGroup className='mb-3' size='lg'>
           <FormControl
             placeholder='Search for artist'
             type='input'
-            onKeyUp={event => {
-              if (event.key == "Enter") {
-                Search();
-              }
-            }}
-            onChange={event => setSearchInput(event.target.value)}
+            value={searchInput}
+            onChange={(e) => handleChange(e.target.value)}
           />
-          <Button onClick={Search}>
-            Search
-          </Button>
         </InputGroup>
       </Container>
-      <Container>
+      {/*  <Container>
         <Row className='mx-2 row row-cols-5'>
           <Card>
             <Card.Img src='#' />
@@ -71,8 +86,7 @@ function SearchBar() {
             </Card.Body>
           </Card>
         </Row>
-
-      </Container>
+      </Container> */}
     </>
   )
 }
