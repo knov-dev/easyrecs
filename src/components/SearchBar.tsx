@@ -10,17 +10,18 @@ const CLIENT_SECRET = "";
 function SearchBar() {
   const url = "http://ws.audioscrobbler.com/2.0/";
   const [searchInput, setSearchInput] = useState("");
+  const [accessToken, setAccessToken] = useState("");
 
+
+  //Conect to the APIs
   useEffect(() => {
     fetch(keys)
       .then(row => row.text())
       .then(
         text => {
           const keyArray = text.split(",")
-          console.log("here are the keys before:" + keyArray)
           const CLIENT_ID = keyArray[0]
           const CLIENT_SECRET = keyArray[1]
-          console.log("Client ID: " + CLIENT_ID + " and Client Secret:" + CLIENT_SECRET)
           const authParameters = {
             method: 'POST',
             headers: {
@@ -30,11 +31,16 @@ function SearchBar() {
           }
           return authParameters;
         })
-      .then(authParameters=>fetch('https://accounts.spotify.com/api/token',authParameters))
+      .then(authParameters => fetch('https://accounts.spotify.com/api/token', authParameters))
       .then(result => result.json())
-      .then(data => console.log(data))
+      .then(data => setAccessToken(data.accessToken))
+      .then(() => console.log("Token saved successfully"))
   }, [])
 
+  //Search
+  async function Search(){
+    console.log("Search for " + searchInput);
+  }
 
   return (
 
@@ -46,12 +52,12 @@ function SearchBar() {
             type='input'
             onKeyUp={event => {
               if (event.key == "Enter") {
-                console.log("Pressed enter");
+                Search();
               }
             }}
             onChange={event => setSearchInput(event.target.value)}
           />
-          <Button onClick={event => { console.log("Clicked Button") }}>
+          <Button onClick={Search}>
             Search
           </Button>
         </InputGroup>
