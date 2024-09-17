@@ -49,15 +49,19 @@ function SearchBar() {
       }
     }
     fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', queryParameters)
-    .then((response) => response.json())
-    .then((json) => {
-      const results = json.filter((artist) =>{
-        return value &&
-        artist &&
-        artist.name &&
-        artist.name.toLowerCase().includes(value)
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+        console.log(json.artists.items)
+        const artists = json.artists.items
+        const results = json.filter((artists) => {
+          return value &&
+            artist &&
+            artist.name &&
+            artist.name.toLowerCase().includes(value)
+        })
+        console.log(results)
       })
-    })
   }
 
   const handleChange = (value) => {
@@ -70,7 +74,7 @@ function SearchBar() {
       <Container>
         <InputGroup className='mb-3' size='lg'>
           <FormControl
-            placeholder='Search for artists'
+            placeholder='Search for artist'
             type='input'
             value={searchInput}
             onChange={(e) => handleChange(e.target.value)}

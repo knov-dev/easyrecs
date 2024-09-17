@@ -6,11 +6,10 @@ import './App.css'
 
 function App() {
   const[results, setResults] = useState([]);
-
   return (
     <>
-    <SearchBar setResults={setResults}></SearchBar>
-    <SearchResultList></SearchResultList>
+    <SearchBar setResults={setResults}/>
+    <SearchResultList results={results}/>
     </>
   )
 
