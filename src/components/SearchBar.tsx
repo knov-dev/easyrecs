@@ -70,7 +70,7 @@ function SearchBar() {
       <Container>
         <InputGroup className='mb-3' size='lg'>
           <FormControl
-            placeholder='Search for artist'
+            placeholder='Search for artists'
             type='input'
             value={searchInput}
             onChange={(e) => handleChange(e.target.value)}
