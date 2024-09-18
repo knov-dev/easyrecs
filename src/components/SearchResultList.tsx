@@ -5,11 +5,11 @@ const SearchResultList =({results}) => {
     return(
         <>
         <div className="results-list">
-            {
-                results.map((result,id) =>{
-                    return <div key={{id}}>{result.name}</div>
-                })
-            }
+            <div>A</div>
+            <div>A</div>
+            <div>A</div>
+            <div>A</div>
+            <div>A</div>
         </div>
         </>
     );

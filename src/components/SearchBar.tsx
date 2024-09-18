@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import '../App.css';
+import './SearchResultList.css'
 import keys from '../../../easyrecskeys.txt';
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
@@ -10,6 +11,7 @@ const CLIENT_SECRET = "";
 function SearchBar() {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [results, setResults] = useState([]);
   //Conect to the API
   useEffect(() => {
     fetch(keys)
@@ -48,20 +50,9 @@ function SearchBar() {
         'Authorization': 'Bearer ' + accessToken
       }
     }
-    fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist', queryParameters)
+    fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist' + '&limit=5', queryParameters)
       .then((response) => response.json())
-      .then((json) => {
-        console.log(json)
-        console.log(json.artists.items)
-        const artists = json.artists.items
-        const results = json.filter((artists) => {
-          return value &&
-            artist &&
-            artist.name &&
-            artist.name.toLowerCase().includes(value)
-        })
-        console.log(results)
-      })
+      .then(json => { setResults(json.artists.items) })
   }
 
   const handleChange = (value) => {
@@ -81,16 +72,15 @@ function SearchBar() {
           />
         </InputGroup>
       </Container>
-      {/*  <Container>
-        <Row className='mx-2 row row-cols-5'>
-          <Card>
-            <Card.Img src='#' />
-            <Card.Body>
-              <Card.Title>Album Name</Card.Title>
-            </Card.Body>
-          </Card>
-        </Row>
-      </Container> */}
+      <Container>
+        <div className='results-list'>
+          {
+            results.map((result, id) => {
+              return <div key={id}>{result.name}</div>
+            })
+          }
+        </div>
+      </Container>
     </>
   )
 }
