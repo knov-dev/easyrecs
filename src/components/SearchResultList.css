@@ -9,3 +9,6 @@
     max-height: 300px;
     overflow-y: scroll;
 }
+.hidden{
+    opacity: 0;
+}

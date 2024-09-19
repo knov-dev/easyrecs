@@ -52,7 +52,10 @@ function SearchBar() {
     }
     fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist' + '&limit=5', queryParameters)
       .then((response) => response.json())
-      .then(json => { setResults(json.artists.items) })
+      .then(json => {
+
+        setResults(json.artists.items)
+      })
   }
 
   const handleChange = (value) => {
@@ -73,7 +76,7 @@ function SearchBar() {
         </InputGroup>
       </Container>
       <Container>
-        <div className='results-list'>
+        <div className={searchInput.length > 0 ? 'results-list' : 'hidden'}>
           {
             results.map((result, id) => {
               return <div key={id}>{result.name}</div>
