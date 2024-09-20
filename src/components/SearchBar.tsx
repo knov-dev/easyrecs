@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, InputGroup, FormControl, Button, Row, Card } from 'react-bootstrap';
+import { Container, InputGroup, FormControl, Button, Row, Card, Image } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import '../App.css';
 import './SearchResultList.css'
@@ -53,14 +53,17 @@ function SearchBar() {
     fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist' + '&limit=5', queryParameters)
       .then((response) => response.json())
       .then(json => {
-
         setResults(json.artists.items)
       })
   }
-
   const handleChange = (value) => {
     setSearchInput(value);
     fetchData(value);
+  }
+
+  //Fetch artist related info
+  const fetchArtistInfo = (value) =>{
+    
   }
 
   return (
@@ -77,11 +80,16 @@ function SearchBar() {
       </Container>
       <Container>
         <div className={searchInput.length > 0 ? 'results-list' : 'hidden'}>
+          <ul>
           {
             results.map((result, id) => {
-              return <div key={id}>{result.name}</div>
+              return <li key={id} className='list-item'>
+                <Image className='img-thumb' src={result.images[0].url} thumbnail/>
+                <h5>{result.name}</h5>
+                </li>
             })
           }
+          </ul>
         </div>
       </Container>
     </>

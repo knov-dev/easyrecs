@@ -9,6 +9,19 @@
     max-height: 300px;
     overflow-y: scroll;
 }
+.list{
+    list-style: none;
+    margin: 1rem;
+}
+.list-item{
+    display: flex;
+    margin-bottom: 1rem;
+    border: 5px solid #9e9e9e;
+    border-radius: 5px;
+}
 .hidden{
     opacity: 0;
+}
+.img-thumb{
+    width: 10%;
 }
