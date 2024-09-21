@@ -12,6 +12,7 @@ function SearchBar() {
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [results, setResults] = useState([]);
+  const [artistID, setArtistID] = useState("");
   //Conect to the API
   useEffect(() => {
     fetch(keys)
@@ -53,6 +54,7 @@ function SearchBar() {
     fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist' + '&limit=5', queryParameters)
       .then((response) => response.json())
       .then(json => {
+        console.log(json.artists.items)
         setResults(json.artists.items)
       })
   }
@@ -62,14 +64,14 @@ function SearchBar() {
   }
 
   //Fetch artist related info
-  const fetchArtistInfo = (value) =>{
-    
+  const fetchArtistInfo = (value) => {
+
   }
 
   return (
     <>
       <Container>
-        <InputGroup className='mb-3' size='lg'>
+        <InputGroup className={artistID == "" ? 'mb-3' : 'hidden'} size='lg'>
           <FormControl
             placeholder='Search for artist'
             type='input'
@@ -78,19 +80,21 @@ function SearchBar() {
           />
         </InputGroup>
       </Container>
-      <Container>
-        <div className={searchInput.length > 0 ? 'results-list' : 'hidden'}>
-          <ul>
+      <Container className={searchInput.length > 0 && artistID == "" ? 'results-list' : 'hidden'}>
+        <Row>
           {
             results.map((result, id) => {
-              return <li key={id} className='list-item'>
-                <Image className='img-thumb' src={result.images[0].url} thumbnail/>
-                <h5>{result.name}</h5>
-                </li>
+              return <a key={id} className='list-item' onClick={() =>{
+                setArtistID(result.id)
+                console.log(artistID)
+              }}>
+                <Image className='img-thumb' src={result.images[0].url} thumbnail />
+                <h5 className='item-name'>{result.name}</h5>
+              </a>
+
             })
           }
-          </ul>
-        </div>
+        </Row>
       </Container>
     </>
   )
