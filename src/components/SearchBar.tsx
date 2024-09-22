@@ -65,8 +65,18 @@ function SearchBar() {
 
   //Fetch artist related info
   const fetchArtistInfo = (value) => {
-
+    const queryParameters = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
   }
+  fetch('https://api.spotify.com/v1/artists/' + value + '/top-tracks', queryParameters)
+  .then((response) => response.json())
+  .then(json => {
+    console.log(json)
+  })
 
   return (
     <>
@@ -84,9 +94,10 @@ function SearchBar() {
         <Row>
           {
             results.map((result, id) => {
-              return <a key={id} className='list-item' onClick={() =>{
+              return <a key={id} className='list-item' onClick={() => {
                 setArtistID(result.id)
                 console.log(artistID)
+                fetchArtistInfo(artistID)
               }}>
                 <Image className='img-thumb' src={result.images[0].url} thumbnail />
                 <h5 className='item-name'>{result.name}</h5>
