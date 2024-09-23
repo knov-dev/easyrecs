@@ -13,6 +13,7 @@ function SearchBar() {
   const [accessToken, setAccessToken] = useState("");
   const [results, setResults] = useState([]);
   const [artistID, setArtistID] = useState("");
+  const [previewURL, setPreviewURL] = useState("");
   //Conect to the API
   useEffect(() => {
     fetch(keys)
@@ -71,17 +72,17 @@ function SearchBar() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + accessToken
       }
+    }
+    fetch('https://api.spotify.com/v1/artists/' + value + '/top-tracks', queryParameters)
+      .then((response) => response.json())
+      .then(json => {
+        console.log(json)
+      })
   }
-  fetch('https://api.spotify.com/v1/artists/' + value + '/top-tracks', queryParameters)
-  .then((response) => response.json())
-  .then(json => {
-    console.log(json)
-  })
-
   return (
     <>
       <Container>
-        <InputGroup className={artistID == "" ? 'mb-3' : 'hidden'} size='lg'>
+        <InputGroup className=/* {artistID == "" ?  */'mb-3'/*  : 'hidden'} */ size='lg'>
           <FormControl
             placeholder='Search for artist'
             type='input'
@@ -90,7 +91,7 @@ function SearchBar() {
           />
         </InputGroup>
       </Container>
-      <Container className={searchInput.length > 0 && artistID == "" ? 'results-list' : 'hidden'}>
+      <Container className=/* {searchInput.length > 0 && artistID == "" ?  */'results-list'/*  : 'hidden'} */>
         <Row>
           {
             results.map((result, id) => {
