@@ -14,7 +14,7 @@ function SearchBar() {
   const [results, setResults] = useState([]);
   const [artistID, setArtistID] = useState("");
   const [previewURL, setPreviewURL] = useState("");
-  const [artistGenres,setArtistGenres] = useState([]);
+  const [artistGenres, setArtistGenres] = useState([]);
   const [relatedArtists, setRelatedArtists] = useState([]);
   //Conect to the API
   useEffect(() => {
@@ -76,23 +76,33 @@ function SearchBar() {
       }
     }
     fetch('https://api.spotify.com/v1/artists/' + value, queryParameters)
-    .then((response) => response.json())
-    .then(json => {
-      setArtistGenres(json.genres)
-      console.log(artistGenres)
-    })
-    .catch(error => console.log('Unable to fetch data:', error));
+      .then((response) => response.json())
+      .then(json => {
+        console.log(json.name)
+        setArtistGenres([]);
+        setArtistGenres(json.genres)
+        console.log(artistGenres)
+      })
+      .catch(error => console.log('Unable to fetch data:', error));
 
     fetch('https://api.spotify.com/v1/artists/' + value + '/top-tracks', queryParameters)
       .then((response) => response.json())
       .then(json => {
+        setPreviewURL("");
         console.log(json)
         setPreviewURL(json.tracks[0].preview_url);
         console.log(previewURL)
       })
       .catch(error => console.log('Unable to fetch data:', error));
 
-
+    fetch('https://api.spotify.com/v1/artists/' + value + '/related-artists', queryParameters)
+      .then((response) => response.json())
+      .then(json => {
+        setRelatedArtists([]);
+        setRelatedArtists(json.artists)
+        console.log(relatedArtists)
+      })
+      .catch(error => console.log('Unable to fetch data:', error));
   }
   return (
     <>
@@ -111,6 +121,7 @@ function SearchBar() {
           {
             results.map((result, id) => {
               return <a key={id} className='list-item' onClick={() => {
+                setArtistID("");
                 setArtistID(result.id)
                 console.log(artistID)
                 fetchArtistInfo(artistID)
