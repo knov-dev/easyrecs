@@ -14,6 +14,8 @@ function SearchBar() {
   const [results, setResults] = useState([]);
   const [artistID, setArtistID] = useState("");
   const [previewURL, setPreviewURL] = useState("");
+  const [artistGenres,setArtistGenres] = useState([]);
+  const [relatedArtists, setRelatedArtists] = useState([]);
   //Conect to the API
   useEffect(() => {
     fetch(keys)
@@ -55,9 +57,9 @@ function SearchBar() {
     fetch('https://api.spotify.com/v1/search?q=' + searchInput + '&type=artist' + '&limit=5', queryParameters)
       .then((response) => response.json())
       .then(json => {
-        console.log(json.artists.items)
         setResults(json.artists.items)
       })
+      .catch(error => console.log('Unable to fetch data:', error));
   }
   const handleChange = (value) => {
     setSearchInput(value);
@@ -73,11 +75,24 @@ function SearchBar() {
         'Authorization': 'Bearer ' + accessToken
       }
     }
+    fetch('https://api.spotify.com/v1/artists/' + value, queryParameters)
+    .then((response) => response.json())
+    .then(json => {
+      setArtistGenres(json.genres)
+      console.log(artistGenres)
+    })
+    .catch(error => console.log('Unable to fetch data:', error));
+
     fetch('https://api.spotify.com/v1/artists/' + value + '/top-tracks', queryParameters)
       .then((response) => response.json())
       .then(json => {
         console.log(json)
+        setPreviewURL(json.tracks[0].preview_url);
+        console.log(previewURL)
       })
+      .catch(error => console.log('Unable to fetch data:', error));
+
+
   }
   return (
     <>
