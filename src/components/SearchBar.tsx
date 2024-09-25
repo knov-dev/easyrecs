@@ -16,6 +16,10 @@ function SearchBar() {
   const [previewURL, setPreviewURL] = useState("");
   const [artistGenres, setArtistGenres] = useState([]);
   const [relatedArtists, setRelatedArtists] = useState([]);
+  const [artistName, setArtistName] = useState("");
+  const [popularity, setPopularity] = useState(0);
+
+
   //Conect to the API
   useEffect(() => {
     fetch(keys)
@@ -68,6 +72,7 @@ function SearchBar() {
 
   //Fetch artist related info
   const fetchArtistInfo = (value) => {
+    
     const queryParameters = {
       method: 'GET',
       headers: {
@@ -75,10 +80,12 @@ function SearchBar() {
         'Authorization': 'Bearer ' + accessToken
       }
     }
+
     fetch('https://api.spotify.com/v1/artists/' + value, queryParameters)
       .then((response) => response.json())
       .then(json => {
-        console.log(json.name)
+        setArtistName(json.name)
+        setPopularity(json.popularity)
         setArtistGenres([]);
         setArtistGenres(json.genres)
         console.log(artistGenres)
