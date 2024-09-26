@@ -18,6 +18,7 @@ function SearchBar() {
   const [relatedArtists, setRelatedArtists] = useState([]);
   const [artistName, setArtistName] = useState("");
   const [popularity, setPopularity] = useState(0);
+  const [externalLink, setExternalLink] = useState("");
 
 
   //Conect to the API
@@ -86,6 +87,7 @@ function SearchBar() {
       .then(json => {
         setArtistName(json.name)
         setPopularity(json.popularity)
+        setExternalLink(json.href)
         setArtistGenres([]);
         setArtistGenres(json.genres)
         console.log(artistGenres)
