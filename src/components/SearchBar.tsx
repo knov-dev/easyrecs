@@ -90,10 +90,10 @@ function SearchBar() {
         setExternalLink(json.href)
         setArtistGenres([]);
         setArtistGenres(json.genres)
-        console.log('Name: ' + artistName)
+        /* console.log('Name: ' + artistName)
         console.log('Genres: ' + artistGenres)
         console.log('Popularity: ' + popularity)
-        console.log('External link: ' + externalLink)
+        console.log('External link: ' + externalLink) */
       })
       .catch(error => console.log('Unable to fetch data:', error));
 
